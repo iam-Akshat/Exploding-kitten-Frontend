@@ -5,38 +5,15 @@ import { Card } from '../components/Card'
 import { descreaseLive, fillCardsRandomly, increaseLive, resetGame } from '../state/slices/deckSlice'
 import { LOCAL_GAME_STATE_KEY } from '../constants'
 import { useTemporaryState } from '../hooks/useTemporaryState'
+import { useGameLogic } from '../hooks/useGameLogic'
 
 const Game = () => {
     const { deck, lastChosenCard, lives, takenOutCards } = useSelector((state) => state.deck)
     const [gameStatus,setGameStatus] = useTemporaryState("",1000)
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (!lastChosenCard) return;
-        if (lastChosenCard === 'cat'){
-            setGameStatus("Card Removed")
-        };
-        if (lastChosenCard === 'diffuse') {
-            setGameStatus("Diffuse card, you get live")
-            dispatch(increaseLive());
-        }
-        if (lastChosenCard === 'exploding') {
-            if (lives > 0) {
-                setGameStatus("Live saved you")
-                dispatch(descreaseLive())
-            } else {
-                setGameStatus("Bomb Killed you")
-                dispatch(resetGame())
-            }
-        };
-        if (lastChosenCard === 'shuffle') {
-            setGameStatus("Shuffle")
-            dispatch(resetGame())
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lastChosenCard, dispatch])
-    // above line complaints not including lives
-    // inlcuding lives will send it to infinite loop
+    useGameLogic(lastChosenCard,lives,dispatch,setGameStatus)
+
     console.log(deck, lastChosenCard, lives, takenOutCards);
     // saving on each move
     // could also make an api call

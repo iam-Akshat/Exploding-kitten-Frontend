@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Deck } from '../components/Deck'
 import { Card } from '../components/Card'
-import { descreaseLive, fillCardsRandomly, increaseLive, resetGame } from '../state/slices/deckSlice'
+import { resetGame } from '../state/slices/deckSlice'
 import { LOCAL_GAME_STATE_KEY } from '../constants'
 import { useTemporaryState } from '../hooks/useTemporaryState'
 import { useGameLogic } from '../hooks/useGameLogic'
+import { LeaderBoard } from '../components/LeaderBoard'
+import { Navigate } from 'react-router'
+import { postUserScore } from '../api/postUserScore'
 
 const Game = () => {
+    const username = useSelector(state=>state.user.username)
     const { deck, lastChosenCard, lives, takenOutCards } = useSelector((state) => state.deck)
     const [gameStatus,setGameStatus] = useTemporaryState("",1000)
     const dispatch = useDispatch()
@@ -28,12 +32,16 @@ const Game = () => {
             if((lastChosenCard === 'exploding' && lives === 0) || lastChosenCard === 'shuffle'){
                 //alert("you lost")
             }else{
-                alert("You won")
+                (async ()=>{
+                    await postUserScore(username)
+                })()
+                alert("You won")// alternatively show modal or something
             }
             
             dispatch(resetGame())
         }
-    },[deck.length, dispatch, lastChosenCard, lives])
+    },[deck.length, dispatch, lastChosenCard, lives, username])
+    if(!username) return <Navigate to="/signin" />
     return (
         <>
         <div className="game-status"><h1>{gameStatus}</h1></div>
@@ -54,6 +62,7 @@ const Game = () => {
                     <Deck deck={takenOutCards.slice(0, takenOutCards.length - 1)} hiddenDeck={false} />
                 </div>
             </div>
+            <LeaderBoard />
         </>
     )
 }

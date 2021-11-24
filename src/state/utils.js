@@ -9,12 +9,14 @@ const genRandomNum = (start = 0, end = 1) => {
  * @returns array
  */
 const chooseNCardsOutOfMCards = (n=5, availableChoices = ['cat', 'diffuse', 'shuffle', 'exploding']) => {
-    const chosenOnes = []
-    for (let i = 1; i <= n; i++) {
-        chosenOnes.push(availableChoices[genRandomNum(0,availableChoices.length)])
-    }
-    return chosenOnes
+    // const chosenOnes = []
+    // for (let i = 1; i <= n; i++) {
+    //     chosenOnes.push(availableChoices[genRandomNum(0,availableChoices.length)])
+    // }
+    // return chosenOnes
+    return ['diffuse', 'exploding', 'exploding', 'cat', 'diffuse']
 }
+
 const emojiMap = {
     'cat':'😼',
     'diffuse':'🙅‍♂️',

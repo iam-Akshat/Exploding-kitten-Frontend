@@ -15,8 +15,7 @@ const Game = () => {
     const { deck, lastChosenCard, lives, takenOutCards } = useSelector((state) => state.deck)
     const [gameStatus,setGameStatus] = useTemporaryState("",1000)
     const dispatch = useDispatch()
-
-    useGameLogic(lastChosenCard,lives,dispatch,setGameStatus)
+    useGameLogic(lastChosenCard,lives,dispatch,setGameStatus,takenOutCards)
 
     console.log(deck, lastChosenCard, lives, takenOutCards);
     // saving on each move

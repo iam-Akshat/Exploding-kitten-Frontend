@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { descreaseLive, increaseLive, resetGame } from '../state/slices/deckSlice'
-const useGameLogic = (lastChosenCard, lives, dispatch, setGameStatus) => {
+const useGameLogic = (lastChosenCard, lives, dispatch, setGameStatus,takenOutCards) => {
     useEffect(() => {
         if (!lastChosenCard) return;
         if (lastChosenCard === 'cat') {
@@ -23,8 +23,8 @@ const useGameLogic = (lastChosenCard, lives, dispatch, setGameStatus) => {
             setGameStatus("Shuffle")
             dispatch(resetGame())
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [lastChosenCard, dispatch])
+        
+    }, [lastChosenCard, dispatch,takenOutCards.length])
 }
 
     // above line complaints not including lives
